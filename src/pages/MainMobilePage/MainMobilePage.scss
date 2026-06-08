@@ -18,6 +18,9 @@
   --calendar-time-row-gap-mobile: 8px;
   --calendar-time-col-gap-mobile: 8px;
   --calendar-time-button-bora-mobile: 6px;
+
+  --color-scroll-track-mobile-time: #201f3c;
+  --color-scroll-thumb-mobile-time: #638ab7;
 }
 
 
@@ -44,7 +47,7 @@
   padding: 20px 16px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 12px;
   margin: 16px;
 
   background: linear-gradient(
@@ -263,8 +266,11 @@
       width: 4px;
     }
     &::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.3);
+      background: color-mix(in srgb, var(--color-scroll-thumb-mobile-time) 50%, transparent);
       border-radius: 4px;
+    }
+    &::-webkit-scrollbar-track {
+      background: var(--color-scroll-track-mobile-time);
     }
   }
 

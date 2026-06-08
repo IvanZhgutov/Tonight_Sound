@@ -342,6 +342,12 @@ export const MainMobilePage = () => {
                   {week.map((button) => {
                     const status = getButtonStatus(button)
                     const isWeekTitle = status === 'weekTitle'
+
+                    // Скрываем weekTitle когда открыт TimeSelection
+                    if (isWeekTitle && activeKey !== null) {
+                      return null
+                    }
+
                     return (
                       <div
                         key={button.id}
