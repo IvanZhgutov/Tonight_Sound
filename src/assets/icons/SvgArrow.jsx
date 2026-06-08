@@ -16,6 +16,24 @@ export const SvgArrowRight = () => (
   </svg>
 )
 
+export const SvgArrowLeft = () => (
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M12 5L7 10L12 15"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+)
+
 export const SvgArrowDown = () => (
   <svg
     width="20"

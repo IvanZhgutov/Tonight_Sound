@@ -1,0 +1,539 @@
+// ============================================================
+//  CSS-переменные для мобильного календаря
+// ============================================================
+
+:root {
+  // --- Отступы сетки календаря (мобильная версия) ---
+  --calendar-max-height-mobile: 100vh;
+
+  --calendar-row-gap-mobile: 12px;
+  --calendar-col-gap-mobile: 8px;
+
+  // --- Кнопки дней (мобильная версия) ---
+  --calendar-day-button-w-mobile: 44px;
+  --calendar-day-button-h-mobile: 44px;
+  --calendar-day-button-bora-mobile: 8px;
+
+  // --- Кнопки времени (мобильная версия) ---
+  --calendar-time-row-gap-mobile: 8px;
+  --calendar-time-col-gap-mobile: 8px;
+  --calendar-time-button-bora-mobile: 6px;
+}
+
+
+// ============================================================
+//  Главная карточка с календарём (мобильная)
+// ============================================================
+
+.container-form-mobile {
+  padding: 16px;
+
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+}
+
+.calendarContainer-mobile {
+  position: relative;
+  font-size: 18px;
+  border-radius: 16px;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--bg-calendar-1) 70%, transparent),
+    color-mix(in srgb, var(--bg-calendar-2) 70%, transparent)
+  );
+
+  // Градиентный бордер через маску
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    padding: 2px;
+    background: linear-gradient(
+      to bottom,
+      var(--border-calendar-1),
+      var(--border-calendar-2)
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
+
+
+// ============================================================
+//  Сетка календаря (мобильная)
+// ============================================================
+
+.calendar-mobile {
+  font-size: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: var(--calendar-row-gap-mobile);
+}
+
+// Переключатель месяцев
+.month-switcher {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 16px 0 8px;
+  margin-top: 8px;
+
+  .month-arrow {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    transition: all 0.2s ease;
+
+    &:active {
+      transform: scale(0.9);
+      border-color: rgba(255, 255, 255, 0.6);
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .current-month {
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+    min-width: 120px;
+    text-align: center;
+  }
+}
+
+// Строка недели
+.week-mobile {
+  font-size: 1em;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--calendar-col-gap-mobile);
+
+  .calendar-button-wrapper-mobile {
+    cursor: pointer;
+    transition: transform 0.15s ease;
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &.wrapper-inactive,
+    &.wrapper-weekTitle {
+      cursor: default;
+      &:active { transform: none; }
+    }
+  }
+
+  .calendar-button-mobile {
+    user-select: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    width: 100%;
+    height: var(--calendar-day-button-h-mobile);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--calendar-day-button-bora-mobile);
+    background-color: var(--day-default);
+    color: white;
+    border: 0;
+    transition: all 0.2s ease;
+
+    &.today {
+      background-color: var(--day-today);
+      border: 1px solid var(--day-border);
+      box-shadow: 0 0 16px color-mix(in srgb, var(--day-today) 80%, transparent);
+    }
+
+    &.inactive {
+      opacity: 30%;
+      cursor: default;
+    }
+    &.active {
+      background-color: var(--day-active);
+      border: 2px solid var(--day-border);
+      box-shadow: 0 0 16px color-mix(in srgb, var(--day-active) 80%, transparent);
+      font-weight: 700;
+    }
+    &.marked {
+      background-color: var(--day-marked);
+      border: 1px solid var(--day-border);
+      box-shadow: 0 0 12px color-mix(in srgb, var(--day-marked) 40%, transparent);
+    }
+  }
+  .weekTitle {
+    background-color: transparent;
+    height: 32px;
+    font-size: 12px;
+    font-weight: 400;
+    cursor: default;
+  }
+}
+
+
+// ============================================================
+//  Выбор времени (мобильная версия)
+// ============================================================
+
+.time-selection {
+  overflow: hidden;
+
+  .hr-container {
+    color: var(--square-color-gray);
+    padding: 16px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+
+    hr {
+      flex: 1;
+      border: none;
+      border-top: 1px solid currentColor;
+    }
+
+    span {
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    button {
+      cursor: pointer;
+      font-size: 14px;
+      background: transparent;
+      border: 0;
+      color: inherit;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+    }
+    button:active {
+      transform: scale(0.9);
+    }
+  }
+
+  .hr-end {
+    display: flex;
+    padding-bottom: 0;
+    padding-top: 16px;
+  }
+
+  .time-content {
+    padding: 4px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--calendar-time-row-gap-mobile);
+    row-gap: var(--calendar-time-col-gap-mobile);
+  }
+
+  .time-btn-wrapper {
+    cursor: pointer;
+
+    &:active { transform: scale(0.95); }
+
+    &.wrapper-inactive {
+      cursor: default;
+      &:active { transform: none; }
+    }
+  }
+
+  .time-btn {
+    user-select: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--calendar-time-button-bora-mobile);
+    background-color: var(--time-default);
+    color: white;
+    border: 1px solid transparent;
+    transition: all 0.15s ease;
+
+    &.inactive {
+      opacity: 30%;
+      cursor: default;
+    }
+    &.active {
+      background-color: var(--time-active);
+      border: 1px solid var(--time-border);
+      box-shadow: 0 0 16px color-mix(in srgb, var(--time-active) 80%, transparent);
+    }
+  }
+}
+
+
+// ============================================================
+//  Колонка: карточки дней (мобильная) - СВЕРХУ
+// ============================================================
+
+.squares-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+
+  .squares-container-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 280px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 8px;
+    margin-right: -8px;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+    }
+  }
+}
+
+.info-content {
+  align-self: self-start;
+}
+
+.square * {
+  user-select: none;
+}
+
+.square {
+  position: relative;
+  min-width: 100%;
+  min-height: 220px;
+  border-radius: 12px;
+  border: 1px solid var(--border-square);
+  background: linear-gradient(to bottom, var(--bg-square-1), var(--bg-square-2));
+  box-shadow: 0 0 16px color-mix(in srgb, var(--day-default) 10%, transparent);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px;
+  flex-shrink: 0;
+  overflow: hidden;
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+    position: relative;
+
+    .hr {
+      width: 2px;
+      border-radius: 4px;
+      background: white;
+      align-self: flex-start;
+      transform-origin: top;
+    }
+  }
+
+  .right-header {
+    flex: 1;
+    min-width: 0;
+
+    .gray-text {
+      font-size: 11px;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .time-studio-container {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 70px;
+      padding-right: 6px;
+      overflow-y: auto;
+
+      &::-webkit-scrollbar { width: 3px; }
+    }
+    .time-studio {
+      user-select: none;
+      cursor: pointer;
+      font-size: 14px;
+      background-color: var(--time-active);
+      padding: 4px 8px;
+      border: 1px solid var(--time-border);
+      border-radius: var(--calendar-time-button-bora-mobile);
+
+      svg {
+        user-select: none;
+        cursor: pointer;
+        color: var(--svg-close);
+      }
+      button {
+        background: transparent;
+        border: 0;
+        padding: 0;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+      }
+      > div {
+        letter-spacing: 0.5px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
+    }
+  }
+
+  .accent-container {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    flex-shrink: 0;
+
+    .accent {
+      font-size: 2em;
+      font-weight: 700;
+      color: var(--square-title-number);
+      line-height: 1;
+    }
+
+    .month {
+      font-size: 1.1em;
+      font-weight: 400;
+      color: var(--square-title-span);
+      margin-top: -4px;
+    }
+  }
+
+  .top-span {
+    position: absolute;
+    top: -4px;
+    transform: translateX(-50%);
+    text-align: center;
+    width: 100%;
+    font-size: 12px;
+  }
+
+  .bottom-span {
+    position: absolute;
+    bottom: 12px;
+    transform: translateX(-50%);
+    text-align: center;
+    line-height: 1.2;
+    width: calc(100% - 24px);
+    font-size: 13px;
+  }
+
+  // ----------- months (mobile) ------------
+  &.months-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    justify-content: start;
+    padding: 12px 16px;
+    min-height: 0;
+    overflow: hidden;
+
+    .month {
+      user-select: none;
+      font-size: 14px;
+      align-self: self-start;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &.active {
+        font-size: 16px;
+        color: var(--color-months);
+        font-weight: 700;
+      }
+      &.ready {
+        color: color-mix(in srgb, var(--color-months) 80%, transparent);
+      }
+      &.inactive {
+        color: #ffffff80;
+      }
+      &:active {
+        transform: scale(0.95) translateX(4px);
+      }
+    }
+  }
+  .months {
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+
+// ----- свернутый день (collapsed mobile) -----
+.square-collapsed {
+  position: relative;
+  min-width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--border-square);
+  background: linear-gradient(to bottom, var(--bg-square-1), var(--bg-square-2));
+  padding: 10px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+
+  .collapsed-date {
+    font-size: 20px;
+    font-weight: 700;
+    color: white;
+    .collapsed-month {
+      color: var(--square-title-span);
+      font-size: 16px;
+      font-weight: 400;
+      margin-left: 4px;
+    }
+  }
+  .collapsed-arrow {
+    color: white;
+    display: flex;
+    align-items: center;
+  }
+  &:active {
+    border-color: var(--border-button-inactive-hover);
+    transform: scale(0.98);
+  }
+}

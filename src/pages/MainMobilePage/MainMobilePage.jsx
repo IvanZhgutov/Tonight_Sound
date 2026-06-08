@@ -2,36 +2,27 @@ import { useMemo, useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion'
 
 import { UseCalendarButtons } from '../../hooks/UseCalendarButtons'
-import { useIsMobile } from '../../hooks/useIsMobile'
 import { months as monthsList, MONTHS_GENITIVE, TIME_OPTIONS } from '../../general/constats'
 
 import { Square } from '../../components/Squares/Square'
 import { CollapsedSquare } from '../../components/Squares/CollapsedSquare'
-import { MonthsSquare } from '../../components/Squares/MonthsSquare'
 import { TimeSelection } from '../../components/Calendar/TimeSelection'
-import { MainMobilePage } from '../MainMobilePage/MainMobilePage'
 
-import { SvgArrowsForward } from '../../assets/icons/SvgArrow'
+import { SvgArrowsForward, SvgArrowLeft, SvgArrowRight } from '../../assets/icons/SvgArrow'
 
-import './MainPage.scss'
+import './MainMobilePage.scss'
 
-export const MainPage = () => {
-  const isMobile = useIsMobile()
-
-  if (isMobile) {
-    return <MainMobilePage />
-  }
+export const MainMobilePage = () => {
   const today = useMemo(() => new Date(), [])
   const todayYear = today.getFullYear()
   const todayMonthIndex = today.getMonth()
   const todayDay = today.getDate()
   const todayMonthGen = MONTHS_GENITIVE[todayMonthIndex]
 
+  const [selectedMonthIndex, setSelectedMonthIndex] = useState(todayMonthIndex)
+
   const calendarWeeks = UseCalendarButtons(today)
 
-  // days: ключ → объект дня { day, monthIndex, year, hours }
-  // order: упорядоченный список ключей в порядке выбора
-  // activeKey: ключ дня, для которого открыт выбор времени и раскрыт квадрат
   const [days, setDays] = useState({})
   const [order, setOrder] = useState([])
   const [activeKey, setActiveKey] = useState(null)
@@ -44,14 +35,13 @@ export const MainPage = () => {
       const container = squaresContainerRef.current
       const start = container.scrollTop
       const end = container.scrollHeight
-      const duration = 1000 // 1 секунда
+      const duration = 1000
       const startTime = performance.now()
 
       const animate = (currentTime) => {
         const elapsed = currentTime - startTime
         const progress = Math.min(elapsed / duration, 1)
 
-        // Easing функция (linear)
         const easeProgress = progress
 
         container.scrollTop = start + (end - start) * easeProgress
@@ -71,19 +61,15 @@ export const MainPage = () => {
 
     const container = squaresContainerRef.current
 
-    // Небольшая задержка, чтобы дождаться завершения анимации раскрытия
     setTimeout(() => {
       if (!squaresContainerRef.current) return
 
-      // Находим активный квадрат в DOM по data-key
       const activeElement = container.querySelector(`[data-square-key="${activeKey}"]`)
       if (!activeElement) return
 
-      // Получаем реальные позиции
       const containerRect = container.getBoundingClientRect()
       const elementRect = activeElement.getBoundingClientRect()
 
-      // Позиция элемента относительно контейнера
       const elementTop = elementRect.top - containerRect.top + container.scrollTop
       const elementBottom = elementTop + elementRect.height
 
@@ -92,16 +78,12 @@ export const MainPage = () => {
 
       let targetScroll = currentScroll
 
-      // Если верх квадрата скрыт — скроллим вверх
       if (elementTop < currentScroll) {
         targetScroll = elementTop
-      }
-      // Если низ квадрата скрыт — скроллим вниз
-      else if (elementBottom > currentScroll + containerHeight) {
+      } else if (elementBottom > currentScroll + containerHeight) {
         targetScroll = elementBottom - containerHeight
       }
 
-      // Анимированный скролл
       if (targetScroll !== currentScroll) {
         const start = currentScroll
         const distance = targetScroll - start
@@ -112,7 +94,6 @@ export const MainPage = () => {
           const elapsed = currentTime - startTime
           const progress = Math.min(elapsed / duration, 1)
 
-          // Easing функция (ease-out)
           const easeProgress = 1 - Math.pow(1 - progress, 3)
 
           container.scrollTop = start + distance * easeProgress
@@ -143,22 +124,18 @@ export const MainPage = () => {
 
     const key = dayKey(button.title, todayMonthIndex, todayYear)
 
-    // Клик по уже активному дню — закрыть time-selection
     if (activeKey === key) {
       setActiveKey(null)
-      // Если у дня не выбраны часы — убираем его из списка
       if ((days[key]?.hours.length ?? 0) === 0) {
         removeKey(key)
       }
       return
     }
 
-    // Если предыдущий активный день не имеет часов — убираем его
     if (activeKey && (days[activeKey]?.hours.length ?? 0) === 0) {
       removeKey(activeKey)
     }
 
-    // Добавляем новый день в days/order, если его там ещё нет
     setDays((prev) => {
       if (prev[key]) return prev
       return {
@@ -211,14 +188,12 @@ export const MainPage = () => {
   }
 
   const handleExpandCollapsed = (key) => {
-    // Если уже активный день не имел часов — убираем его
     if (activeKey && activeKey !== key && (days[activeKey]?.hours.length ?? 0) === 0) {
       removeKey(activeKey)
     }
     setActiveKey(key)
   }
 
-  // Индекс недели, под которой нужно показать выбор времени
   const activeWeekIndex = useMemo(() => {
     if (!activeKey) return -1
     const parts = activeKey.split('-')
@@ -231,7 +206,6 @@ export const MainPage = () => {
     return -1
   }, [activeKey, calendarWeeks])
 
-  // TIME_OPTIONS с подсветкой выбранных часов активного дня
   const timeOptions = useMemo(() => {
     const selected = activeKey ? days[activeKey]?.hours || [] : []
     return TIME_OPTIONS.map((t) => {
@@ -240,7 +214,6 @@ export const MainPage = () => {
     })
   }, [activeKey, days])
 
-  // Статус кнопки дня
   const getButtonStatus = (button) => {
     if (button.status === 'inactive' || button.status === 'weekTitle') return button.status
     if (!button.inCurrentMonth) return 'inactive'
@@ -257,7 +230,14 @@ export const MainPage = () => {
     [order, days]
   )
 
-  // Стек квадратов для правой колонки
+  const handlePrevMonth = () => {
+    setSelectedMonthIndex((prev) => (prev === 0 ? 11 : prev - 1))
+  }
+
+  const handleNextMonth = () => {
+    setSelectedMonthIndex((prev) => (prev === 11 ? 0 : prev + 1))
+  }
+
   const renderSquares = () => {
     if (order.length === 0) {
       return (
@@ -272,7 +252,6 @@ export const MainPage = () => {
       )
     }
 
-    // Если >1 дня → старые становятся collapsed
     const shouldCollapseInactive = order.length > 1
 
     return order.map((key, index) => {
@@ -294,7 +273,6 @@ export const MainPage = () => {
         )
       }
 
-      // Стабильный key для активного квадрата — всегда "square-main"
       return (
         <div key="square-main" data-square-key={key}>
           <Square
@@ -315,12 +293,40 @@ export const MainPage = () => {
   }
 
   return (
-    <div className="container-form">
+    <div className="container-form-mobile">
       <h1>Записаться на студию</h1>
 
-      <div className="calendarContainer">
+      <div className="calendarContainer-mobile">
+        {/* ============ квадраты сверху ============ */}
+        <div className="squares-mobile">
+          <LayoutGroup>
+            <AnimatePresence mode="popLayout" initial={false}>
+              <div className='squares-container-mobile' ref={squaresContainerRef}>
+                {renderSquares()}
+              </div>
+            </AnimatePresence>
+
+            <AnimatePresence initial={false}>
+              {hasAnyHours && (
+                <motion.button
+                  key="next-btn"
+                  type="button"
+                  className="button primary"
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 16 }}
+                  transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                  layout
+                >
+                  Далее <SvgArrowsForward />
+                </motion.button>
+              )}
+            </AnimatePresence>
+          </LayoutGroup>
+        </div>
+
         {/* ============ календарь ============ */}
-        <div className="calendar">
+        <div className="calendar-mobile">
           <LayoutGroup>
             {calendarWeeks.map((week, weekIndex) => (
               <motion.div
@@ -328,21 +334,21 @@ export const MainPage = () => {
                 layout
                 transition={{ layout: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } }}
               >
-                <div className="week">
+                <div className="week-mobile">
                   {week.map((button) => {
                     const status = getButtonStatus(button)
                     const isWeekTitle = status === 'weekTitle'
                     return (
                       <div
                         key={button.id}
-                        className={`calendar-button-wrapper wrapper-${status}`}
+                        className={`calendar-button-wrapper-mobile wrapper-${status}`}
                         onClick={() => handleDayClick(button)}
                       >
                         <motion.button
                           type="button"
-                          className={`calendar-button ${status}`}
+                          className={`calendar-button-mobile ${status}`}
                           animate={{
-                            height: isWeekTitle ? '40px' : (activeKey !== null ? '42px' : '64px'),
+                            height: isWeekTitle ? '32px' : (activeKey !== null ? '40px' : '48px'),
                           }}
                           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                         >
@@ -366,36 +372,27 @@ export const MainPage = () => {
               </motion.div>
             ))}
           </LayoutGroup>
-        </div>
 
-        {/* ============ правая колонка с квадратами ============ */}
-        <div className="squares">
-          <LayoutGroup>
-            <AnimatePresence mode="popLayout" initial={false}>
-              <div className='squares-container' ref={squaresContainerRef}>
-                {renderSquares()}
-              </div>
-            </AnimatePresence>
-
-            <MonthsSquare months={monthsList} />
-
-            <AnimatePresence initial={false}>
-              {hasAnyHours && (
-                <motion.button
-                  key="next-btn"
-                  type="button"
-                  className="button primary"
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 16 }}
-                  transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                  layout
-                > 
-                  Далее <SvgArrowsForward />
-                </motion.button>
-              )}
-            </AnimatePresence>
-          </LayoutGroup>
+          {/* ============ переключатель месяцев ============ */}
+          <div className="month-switcher">
+            <button
+              type="button"
+              className="month-arrow"
+              onClick={handlePrevMonth}
+              aria-label="Предыдущий месяц"
+            >
+              <SvgArrowLeft />
+            </button>
+            <span className="current-month">{monthsList[selectedMonthIndex].title}</span>
+            <button
+              type="button"
+              className="month-arrow"
+              onClick={handleNextMonth}
+              aria-label="Следующий месяц"
+            >
+              <SvgArrowRight />
+            </button>
+          </div>
         </div>
       </div>
     </div>
