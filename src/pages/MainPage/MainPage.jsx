@@ -260,15 +260,23 @@ export const MainPage = () => {
                 <div className="week">
                   {week.map((button) => {
                     const status = getButtonStatus(button)
+                    const isWeekTitle = status === 'weekTitle'
                     return (
                       <div
                         key={button.id}
                         className={`calendar-button-wrapper wrapper-${status}`}
                         onClick={() => handleDayClick(button)}
                       >
-                        <button type="button" className={`calendar-button ${status}`}>
+                        <motion.button
+                          type="button"
+                          className={`calendar-button ${status}`}
+                          animate={{
+                            height: isWeekTitle ? '40px' : (activeKey !== null ? '42px' : '64px'),
+                          }}
+                          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                        >
                           {button.title}
-                        </button>
+                        </motion.button>
                       </div>
                     )
                   })}

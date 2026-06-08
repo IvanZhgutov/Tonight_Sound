@@ -31,7 +31,7 @@
   position: relative;
   font-size: 32px;
   border-radius: 24px;
-  padding: 42px;
+  padding: 36px 42px;
   display: flex;
   justify-content: space-between;
   gap: 32px;
@@ -89,8 +89,8 @@
   gap: var(--calendar-col-gap);
 
   .calendar-button-wrapper {
-    padding: calc(var(--calendar-row-gap) / 2) calc(var(--calendar-col-gap) / 2);
-    margin: calc(var(--calendar-row-gap) * -0.5) calc(var(--calendar-col-gap) * -0.5);
+    // padding: calc(var(--calendar-row-gap) / 2) calc(var(--calendar-col-gap) / 2);
+    // margin: calc(var(--calendar-row-gap) * -0.5) calc(var(--calendar-col-gap) * -0.5);
     cursor: pointer;
 
     &:hover {
@@ -105,6 +105,7 @@
   }
 
   .calendar-button {
+    user-select: none;
     cursor: pointer;
     font-size: 0.5em;
     font-weight: 400;
@@ -225,6 +226,7 @@
   }
 
   .time-btn {
+    user-select: none;
     transition-duration: 200ms;
     cursor: pointer;
     font-size: 0.5em;
@@ -292,6 +294,10 @@
 
 .info-content {
   align-self: self-start;
+}
+
+.square * {
+  user-select: none;
 }
 
 .square {

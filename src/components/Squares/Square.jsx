@@ -40,7 +40,7 @@ export const Square = ({
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
     >
       {/* Кнопка свернуть, поверх — только если selectedDays > 2 */}
-      {showCollapseToggle && (
+      {/* {showCollapseToggle && (
         <button
           type="button"
           className="collapse-btn"
@@ -52,7 +52,7 @@ export const Square = ({
         >
           <SvgArrowDown />
         </button>
-      )}
+      )} */}
 
       <motion.div
         className="header"
