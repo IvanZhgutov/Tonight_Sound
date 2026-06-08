@@ -64,7 +64,13 @@ export const Square = ({
         </button>
       )}
 
-      <motion.div className="header">
+      <motion.div
+        className="header"
+        // animate={{
+        //   padding: isFull ? '8px 12px' : '0px',
+        // }}
+        // transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      >
         {/* "Сегодня" — absolute, в центре */}
         <AnimatePresence>
           {!isFull && isToday && (
@@ -77,8 +83,7 @@ export const Square = ({
               transition={{ duration: 0.3, ease: 'easeOut' }}
               style={{
                 position: 'absolute',
-                top: -36,
-                left: '50%',
+                top: -4,
                 transform: 'translateX(-50%)',
                 textAlign: 'center',
                 width: '100%',
@@ -94,11 +99,12 @@ export const Square = ({
           className="accent-container"
           animate={{
             x: isFull ? 0 : '100%', // 264px (ширина square) / 2 - 80px (ширина accent) / 2 = 92px
-            y: isFull ? 0 : 42, // 264px (ширина square) / 2 - 80px (ширина accent) / 2 = 92px
+            y: isFull ? 0 : 42,
           }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         >
           <span className="accent">{day}</span>
+          
           <span className="month">{monthName}</span>
         </motion.div>
 

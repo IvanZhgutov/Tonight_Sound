@@ -84,11 +84,6 @@ body {
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
   color: white;
-
-  * {
-    transition-duration: 200ms;
-    box-sizing: border-box;
-  }
 }
 
 h1 {
@@ -166,6 +161,7 @@ h1 {
     border: 1px solid var(--bg-button-active);
     &:hover {
       border: 1px solid var(--border-button-inactive-hover);
+      transition-duration: 200ms;
     }
   }
 
@@ -531,7 +527,7 @@ h1 {
     align-items: center;
     justify-content: center;
     width: 80px;
-    height: 100px;
+    height: 110px;
     flex-shrink: 0;
 
     .accent {
