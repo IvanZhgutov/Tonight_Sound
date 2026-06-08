@@ -58,6 +58,68 @@ export const MainPage = () => {
     }
   }, [order.length])
 
+  // Автоскролл при раскрытии collapsed квадрата
+  useEffect(() => {
+    if (!activeKey || !squaresContainerRef.current) return
+
+    const container = squaresContainerRef.current
+
+    // Небольшая задержка, чтобы дождаться завершения анимации раскрытия
+    setTimeout(() => {
+      if (!squaresContainerRef.current) return
+
+      // Находим активный квадрат в DOM по data-key
+      const activeElement = container.querySelector(`[data-square-key="${activeKey}"]`)
+      if (!activeElement) return
+
+      // Получаем реальные позиции
+      const containerRect = container.getBoundingClientRect()
+      const elementRect = activeElement.getBoundingClientRect()
+
+      // Позиция элемента относительно контейнера
+      const elementTop = elementRect.top - containerRect.top + container.scrollTop
+      const elementBottom = elementTop + elementRect.height
+
+      const containerHeight = container.clientHeight
+      const currentScroll = container.scrollTop
+
+      let targetScroll = currentScroll
+
+      // Если верх квадрата скрыт — скроллим вверх
+      if (elementTop < currentScroll) {
+        targetScroll = elementTop
+      }
+      // Если низ квадрата скрыт — скроллим вниз
+      else if (elementBottom > currentScroll + containerHeight) {
+        targetScroll = elementBottom - containerHeight
+      }
+
+      // Анимированный скролл
+      if (targetScroll !== currentScroll) {
+        const start = currentScroll
+        const distance = targetScroll - start
+        const duration = 400
+        const startTime = performance.now()
+
+        const animate = (currentTime) => {
+          const elapsed = currentTime - startTime
+          const progress = Math.min(elapsed / duration, 1)
+
+          // Easing функция (ease-out)
+          const easeProgress = 1 - Math.pow(1 - progress, 3)
+
+          container.scrollTop = start + distance * easeProgress
+
+          if (progress < 1) {
+            requestAnimationFrame(animate)
+          }
+        }
+
+        requestAnimationFrame(animate)
+      }
+    }, 100)
+  }, [activeKey, order])
+
   const dayKey = (d, m, y) => `${y}-${m}-${d}`
 
   const removeKey = (key) => {
@@ -215,30 +277,32 @@ export const MainPage = () => {
 
       if (shouldCollapseInactive && !isActive) {
         return (
-          <CollapsedSquare
-            key={key}
-            day={d.day}
-            monthName={monthName}
-            onClick={() => handleExpandCollapsed(key)}
-          />
+          <div key={key} data-square-key={key}>
+            <CollapsedSquare
+              day={d.day}
+              monthName={monthName}
+              onClick={() => handleExpandCollapsed(key)}
+            />
+          </div>
         )
       }
 
       // Стабильный key для активного квадрата — всегда "square-main"
       return (
-        <Square
-          key="square-main"
-          state={state}
-          day={d.day}
-          monthName={monthName}
-          hours={d.hours}
-          isToday={false}
-          hasFreeHours
-          showCollapseToggle={shouldCollapseInactive && isActive}
-          onRemoveHour={(h) => handleRemoveHour(key, h)}
-          onCancel={() => handleCancelDay(key)}
-          onCollapse={() => setActiveKey(null)}
-        />
+        <div key="square-main" data-square-key={key}>
+          <Square
+            state={state}
+            day={d.day}
+            monthName={monthName}
+            hours={d.hours}
+            isToday={false}
+            hasFreeHours
+            showCollapseToggle={shouldCollapseInactive && isActive}
+            onRemoveHour={(h) => handleRemoveHour(key, h)}
+            onCancel={() => handleCancelDay(key)}
+            onCollapse={() => setActiveKey(null)}
+          />
+        </div>
       )
     })
   }
