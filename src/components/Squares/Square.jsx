@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { SvgClose } from '../../assets/icons/SvgClose'
 import { SvgNo } from '../../assets/icons/SvgNo'
 import { SvgArrowDown } from '../../assets/icons/SvgArrow'
+import { useSquareWidth } from '../../hooks/useSquareWidth'
 
 /**
  * Square — карточка выбранного дня.
@@ -30,11 +31,18 @@ export const Square = ({
   onRemoveHour,
   onCancel,
   onCollapse,
+  isMobile = false,
 }) => {
   const isFull = state === 'full'
+  const { squareRef, width } = useSquareWidth()
+
+  // Вычисляем смещение для центрирования: (ширина контейнера / 2) - (ширина accent / 2)
+  const accentWidth = 125 // ширина .accent-container в мобильной версии
+  const centerOffset = isMobile && width > 0 ? (width / 2 - accentWidth / 2) : (isMobile ? '130%' : '100%')
 
   return (
     <motion.div
+      ref={squareRef}
       className="square"
       layout
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
@@ -80,8 +88,10 @@ export const Square = ({
         {/* Дата — сдвигается в центр через animate */}
         <motion.div
           className="accent-container"
+          initial={{ opacity: 0, x: centerOffset, y: 42 }}
           animate={{
-            x: isFull ? 0 : '100%', // 264px (ширина square) / 2 - 80px (ширина accent) / 2 = 92px
+            opacity: 1,
+            x: isFull ? 0 : centerOffset,
             y: isFull ? 0 : 42,
           }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}

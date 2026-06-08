@@ -22,8 +22,10 @@
 
 
 // ============================================================
-//  Главная карточка с календарём (мобильная)
+//  Главная карточка с календарём (MOBILE ONLY)
 // ============================================================
+
+.container-form-mobile {
 
 .container-form-mobile {
   padding: 16px;
@@ -204,10 +206,11 @@
 
 .time-selection {
   overflow: hidden;
+  height: 195px;
 
   .hr-container {
     color: var(--square-color-gray);
-    padding: 16px 0;
+    padding: 8px 0;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -222,11 +225,12 @@
     span {
       font-size: 12px;
       white-space: nowrap;
+      font-weight: 400;
     }
 
     button {
       cursor: pointer;
-      font-size: 14px;
+      font-size: 12px;
       background: transparent;
       border: 0;
       color: inherit;
@@ -246,11 +250,22 @@
   }
 
   .time-content {
-    padding: 4px;
+    padding-right: 8px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: var(--calendar-time-row-gap-mobile);
     row-gap: var(--calendar-time-col-gap-mobile);
+    max-height: 133px;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+    }
   }
 
   .time-btn-wrapper {
@@ -333,7 +348,7 @@
 .square {
   position: relative;
   min-width: 100%;
-  min-height: 220px;
+  min-height: 250px;
   border-radius: 12px;
   border: 1px solid var(--border-square);
   background: linear-gradient(to bottom, var(--bg-square-1), var(--bg-square-2));
@@ -375,7 +390,7 @@
       display: flex;
       flex-direction: column;
       gap: 6px;
-      max-height: 70px;
+      max-height: 75px;
       padding-right: 6px;
       overflow-y: auto;
 
@@ -422,18 +437,18 @@
     text-align: center;
     align-items: center;
     justify-content: center;
-    width: 60px;
+    width: 100px;
     flex-shrink: 0;
 
     .accent {
-      font-size: 2em;
+      font-size: 3em;
       font-weight: 700;
       color: var(--square-title-number);
       line-height: 1;
     }
 
     .month {
-      font-size: 1.1em;
+      font-size: 2em;
       font-weight: 400;
       color: var(--square-title-span);
       margin-top: -4px;
@@ -537,3 +552,5 @@
     transform: scale(0.98);
   }
 }
+
+} // Закрываем .container-form-mobile

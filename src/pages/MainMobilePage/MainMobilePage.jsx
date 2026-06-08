@@ -248,6 +248,7 @@ export const MainMobilePage = () => {
           monthName={todayMonthGen}
           isToday
           hasFreeHours={false}
+          isMobile={true}
         />
       )
     }
@@ -286,6 +287,7 @@ export const MainMobilePage = () => {
             onRemoveHour={(h) => handleRemoveHour(key, h)}
             onCancel={() => handleCancelDay(key)}
             onCollapse={() => setActiveKey(null)}
+            isMobile={true}
           />
         </div>
       )
@@ -297,6 +299,7 @@ export const MainMobilePage = () => {
       <h1>Записаться на студию</h1>
 
       <div className="calendarContainer-mobile">
+        <LayoutGroup>
         {/* ============ квадраты сверху ============ */}
         <div className="squares-mobile">
           <LayoutGroup>
@@ -306,7 +309,7 @@ export const MainMobilePage = () => {
               </div>
             </AnimatePresence>
 
-            <AnimatePresence initial={false}>
+            <AnimatePresence mode="sync">
               {hasAnyHours && (
                 <motion.button
                   key="next-btn"
@@ -348,7 +351,7 @@ export const MainMobilePage = () => {
                           type="button"
                           className={`calendar-button-mobile ${status}`}
                           animate={{
-                            height: isWeekTitle ? '32px' : (activeKey !== null ? '40px' : '48px'),
+                            height: isWeekTitle ? '32px' : (activeKey !== null ? '40px' : '40px'),
                           }}
                           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                         >
@@ -366,6 +369,7 @@ export const MainMobilePage = () => {
                       timeOptions={timeOptions}
                       onTimeClick={handleTimeClick}
                       onClose={handleCloseTimeSelection}
+                      isMobile={true}
                     />
                   )}
                 </AnimatePresence>
@@ -394,6 +398,7 @@ export const MainMobilePage = () => {
             </button>
           </div>
         </div>
+        </LayoutGroup>
       </div>
     </div>
   )

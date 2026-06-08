@@ -5,12 +5,12 @@ import { motion, AnimatePresence } from 'framer-motion'
  * Каждая кнопка появляется со scale + opacity (stagger), и весь блок
  * аккуратно раскрывает свою высоту, чтобы лэйаут календаря под ним поехал пл авно.
  */
-export const TimeSelection = ({ timeOptions, onTimeClick, onClose }) => {
+export const TimeSelection = ({ timeOptions, onTimeClick, onClose, isMobile = false }) => {
   return (
     <motion.div
       className="time-selection"
       initial={{ opacity: 0, height: 0 }}
-      animate={{ opacity: 1, height: '250px' }}
+      animate={{ opacity: 1, height: isMobile ? '195px' : '250px' }}
       exit={{ opacity: 0, height: 0 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       // transition={{ duration: 0.4 }}
