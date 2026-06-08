@@ -419,7 +419,7 @@ h1 {
 .squares {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
   min-width: 264px;
   max-height: calc(var(--calendar-max-height) - 84px);
   overflow-y: auto;
@@ -442,42 +442,16 @@ h1 {
   background: linear-gradient(to bottom, var(--bg-square-1), var(--bg-square-2));
   box-shadow: 0 0 28px color-mix(in srgb, var(--day-default) 10%, transparent);
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px;
   flex-shrink: 0;
   overflow: hidden;
 
-  // ----------- noday / ready ------------
-  &.noday,
-  &.ready {
-    flex-direction: column;
-    justify-content: space-between;
-    text-align: center;
-    align-items: center;
-    padding: 12px;
-
-    .header {
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    .info-content {
-      align-self: center;
-    }
-    .accent-container {
-      margin-top: 12px;
-    }
-  }
-
-  // ----------- full ------------
-  &.full {
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 12px;
-  }
-
   .header {
     display: flex;
-    justify-content: center;
+    flex-direction: row;
+    align-items: flex-start;
     gap: 16px;
     width: 100%;
     position: relative;
@@ -580,9 +554,13 @@ h1 {
   }
 
   .bottom-span {
+    position: absolute;
+    bottom: 12px;
+    // left: 50%;
+    transform: translateX(-50%);
     text-align: center;
     line-height: 1.2;
-    margin-bottom: 8px;
+    width: calc(100% - 24px);
   }
 
   // ----------- months ------------
@@ -595,6 +573,8 @@ h1 {
     align-self: self-start;
     padding: 16px 24px;
     min-height: 0;
+    flex: 1;
+    overflow: hidden;
 
     .month {
       user-select: none;
@@ -622,7 +602,6 @@ h1 {
     overflow-x: hidden;
     width: 100%;
     height: 100%;
-    max-height: 240px;
   }
 }
 

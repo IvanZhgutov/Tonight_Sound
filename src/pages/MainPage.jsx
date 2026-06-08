@@ -164,11 +164,11 @@ export const MainPage = () => {
       activeKey,
       days,
     })
-    
+
     if (order.length === 0) {
       return (
         <Square
-          key="today-noday"
+          key="square-main"
           state="noday"
           day={todayDay}
           monthName={todayMonthGen}
@@ -181,7 +181,7 @@ export const MainPage = () => {
     // Если >1 дня → старые становятся collapsed
     const shouldCollapseInactive = order.length > 1
 
-    return order.map((key) => {
+    return order.map((key, index) => {
       const d = days[key]
       if (!d) return null
       const monthName = MONTHS_GENITIVE[d.monthIndex]
@@ -199,9 +199,10 @@ export const MainPage = () => {
         )
       }
 
+      // Стабильный key для активного квадрата — всегда "square-main"
       return (
         <Square
-          key={key}
+          key="square-main"
           state={state}
           day={d.day}
           monthName={monthName}

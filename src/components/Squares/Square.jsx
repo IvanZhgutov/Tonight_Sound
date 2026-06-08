@@ -35,9 +35,8 @@ export const Square = ({
 
   return (
     <motion.div
-      className={`square ${state}`}
+      className="square"
       layout
-      // transition={{ layout: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } }}
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
     >
       {/* Кнопка свернуть, поверх — только если selectedDays > 2 */}
@@ -65,8 +64,8 @@ export const Square = ({
         </button>
       )}
 
-      <motion.div className="header" layout>
-        {/* "Сегодня" — уходит вверх */}
+      <motion.div className="header">
+        {/* "Сегодня" — absolute, в центре */}
         <AnimatePresence>
           {!isFull && isToday && (
             <motion.span
@@ -74,16 +73,31 @@ export const Square = ({
               className="top-span gray-text"
               initial={{ opacity: 0, y: -16 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -28 }}
+              exit={{ opacity: 0, y: -16 }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
+              style={{
+                position: 'absolute',
+                top: -36,
+                left: '50%',
+                transform: 'translateX(-50%)',
+                textAlign: 'center',
+                width: '100%',
+              }}
             >
               Сегодня
             </motion.span>
           )}
         </AnimatePresence>
 
-        {/* Дата — переезжает через layout */}
-        <motion.div className="accent-container" layout>
+        {/* Дата — сдвигается в центр через animate */}
+        <motion.div
+          className="accent-container"
+          animate={{
+            x: isFull ? 0 : '100%', // 264px (ширина square) / 2 - 80px (ширина accent) / 2 = 92px
+            y: isFull ? 0 : 42, // 264px (ширина square) / 2 - 80px (ширина accent) / 2 = 92px
+          }}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+        >
           <span className="accent">{day}</span>
           <span className="month">{monthName}</span>
         </motion.div>
@@ -97,7 +111,8 @@ export const Square = ({
               initial={{ height: 0 }}
               animate={{ height: 100 }}
               exit={{ height: 0 }}
-              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: 0.05 }}
+              // transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: 0.05 }}
+              transition={{ duration: 0.4 }}
               style={{ transformOrigin: 'top' }}
             />
           )}
@@ -155,7 +170,7 @@ export const Square = ({
             className="bottom-span"
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 28 }}
+            exit={{ opacity: 0, y: 18 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
           >
             {hasFreeHours ? (
