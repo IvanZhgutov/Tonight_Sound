@@ -24,8 +24,10 @@
 
 
 // ============================================================
-//  Главная карточка с календарём
+//  Главная карточка с календарём (DESKTOP)
 // ============================================================
+
+.container-form:not(.container-form-mobile) {
 
 .calendarContainer {
   position: relative;
@@ -527,3 +529,5 @@
     border-color: var(--border-button-inactive-hover);
   }
 }
+
+} // Закрываем .container-form:not(.container-form-mobile)
