@@ -12,7 +12,7 @@ export const TimeSelection = ({ timeOptions, onTimeClick, onClose }) => {
       initial={{ opacity: 0, height: 0 }}
       animate={{ opacity: 1, height: '250px' }}
       exit={{ opacity: 0, height: 0 }}
-      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       // transition={{ duration: 0.4 }}
     >
       <div className="hr-container">

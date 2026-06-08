@@ -1,15 +1,17 @@
 import { useMemo, useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion'
 
-import { UseCalendarButtons } from '../hooks/UseCalendarButtons'
-import { months as monthsList, MONTHS_GENITIVE, TIME_OPTIONS } from '../general/constats'
+import { UseCalendarButtons } from '../../hooks/UseCalendarButtons'
+import { months as monthsList, MONTHS_GENITIVE, TIME_OPTIONS } from '../../general/constats'
 
-import { Square } from '../components/Squares/Square'
-import { CollapsedSquare } from '../components/Squares/CollapsedSquare'
-import { MonthsSquare } from '../components/Squares/MonthsSquare'
-import { TimeSelection } from '../components/Calendar/TimeSelection'
+import { Square } from '../../components/Squares/Square'
+import { CollapsedSquare } from '../../components/Squares/CollapsedSquare'
+import { MonthsSquare } from '../../components/Squares/MonthsSquare'
+import { TimeSelection } from '../../components/Calendar/TimeSelection'
 
-import { SvgArrowsForward } from '../assets/icons/SvgArrow'
+import { SvgArrowsForward } from '../../assets/icons/SvgArrow'
+
+import './MainPage.scss'
 
 export const MainPage = () => {
   const today = useMemo(() => new Date(), [])
