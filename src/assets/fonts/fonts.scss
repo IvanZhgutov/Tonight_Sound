@@ -1,0 +1,22 @@
+@mixin define-font($name, $weight, $file) {
+  @font-face {
+    font-family: $name;
+    src: url('./#{$name}/#{$file}.ttf');
+    font-weight: $weight;
+  }
+}
+
+@include define-font('vk', 400, 'VKSansDisplay-Regular');
+@include define-font('vk', 500, 'VKSansDisplay-Medium');
+@include define-font('vk', 600, 'VKSansDisplay-DemiBold');
+@include define-font('vk', 700, 'VKSansDisplay-Bold');
+
+@include define-font('inter', 400, 'Inter-Regular');
+@include define-font('inter', 500, 'Inter-Medium');
+@include define-font('inter', 600, 'Inter-SemiBold');
+@include define-font('inter', 700, 'Inter-Bold');
+@include define-font('inter', 1000, 'Inter-Black');
+
+
+
+
