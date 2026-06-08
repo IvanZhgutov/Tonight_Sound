@@ -43,20 +43,10 @@ export const Square = ({
       {showCollapseToggle && (
         <button
           type="button"
+          className="collapse-btn"
           onClick={(e) => {
             e.stopPropagation()
             onCollapse?.()
-          }}
-          style={{
-            position: 'absolute',
-            top: 6,
-            right: 10,
-            background: 'transparent',
-            border: 0,
-            color: 'white',
-            cursor: 'pointer',
-            zIndex: 2,
-            display: 'flex',
           }}
           aria-label="Свернуть"
         >
@@ -81,13 +71,6 @@ export const Square = ({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -16 }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
-              style={{
-                position: 'absolute',
-                top: -4,
-                transform: 'translateX(-50%)',
-                textAlign: 'center',
-                width: '100%',
-              }}
             >
               Сегодня
             </motion.span>
@@ -117,9 +100,7 @@ export const Square = ({
               initial={{ height: 0 }}
               animate={{ height: 100 }}
               exit={{ height: 0 }}
-              // transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: 0.05 }}
               transition={{ duration: 0.4 }}
-              style={{ transformOrigin: 'top' }}
             />
           )}
         </AnimatePresence>
@@ -134,7 +115,6 @@ export const Square = ({
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 28 }}
               transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
-              style={{ flex: 1, minWidth: 0 }}
             >
               <span className="gray-text">Часы на студии:</span>
               <div className="time-studio-container">

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion'
 
 import { UseCalendarButtons } from '../hooks/UseCalendarButtons'
@@ -26,6 +26,35 @@ export const MainPage = () => {
   const [days, setDays] = useState({})
   const [order, setOrder] = useState([])
   const [activeKey, setActiveKey] = useState(null)
+
+  const squaresContainerRef = useRef(null)
+
+  // Автоскролл вниз при добавлении новых дней
+  useEffect(() => {
+    if (squaresContainerRef.current && order.length > 0) {
+      const container = squaresContainerRef.current
+      const start = container.scrollTop
+      const end = container.scrollHeight
+      const duration = 1000 // 1 секунда
+      const startTime = performance.now()
+
+      const animate = (currentTime) => {
+        const elapsed = currentTime - startTime
+        const progress = Math.min(elapsed / duration, 1)
+
+        // Easing функция (linear)
+        const easeProgress = progress
+
+        container.scrollTop = start + (end - start) * easeProgress
+
+        if (progress < 1) {
+          requestAnimationFrame(animate)
+        }
+      }
+
+      requestAnimationFrame(animate)
+    }
+  }, [order.length])
 
   const dayKey = (d, m, y) => `${y}-${m}-${d}`
 
@@ -159,12 +188,6 @@ export const MainPage = () => {
 
   // Стек квадратов для правой колонки
   const renderSquares = () => {
-    console.log({
-      order,
-      activeKey,
-      days,
-    })
-
     if (order.length === 0) {
       return (
         <Square
@@ -268,7 +291,9 @@ export const MainPage = () => {
         <div className="squares">
           <LayoutGroup>
             <AnimatePresence mode="popLayout" initial={false}>
-              {renderSquares()}
+              <div className='squares-container' ref={squaresContainerRef}>
+                {renderSquares()}
+              </div>
             </AnimatePresence>
 
             <MonthsSquare months={monthsList} />
