@@ -2,13 +2,13 @@ import { useMemo, useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion'
 
 import { UseCalendarButtons } from '../../hooks/UseCalendarButtons'
-import { months as monthsList, MONTHS_GENITIVE, TIME_OPTIONS } from '../../general/constats'
+import { months as monthsList, MONTHS_GENITIVE, MONTHS_FULL, TIME_OPTIONS } from '../../general/constats'
 
 import { Square } from '../../components/Squares/Square'
 import { CollapsedSquare } from '../../components/Squares/CollapsedSquare'
 import { TimeSelection } from '../../components/Calendar/TimeSelection'
 
-import { SvgArrowsForward, SvgArrowLeft, SvgArrowRight } from '../../assets/icons/SvgArrow'
+import { SvgArrowsForward, SvgArrowLeft, SvgArrowRight, SvgArrowMobileLeft, SvgArrowMobileRight } from '../../assets/icons/SvgArrow'
 
 import './MainMobilePage.scss'
 
@@ -309,7 +309,7 @@ export const MainMobilePage = () => {
               </div>
             </AnimatePresence>
 
-            <AnimatePresence mode="sync">
+            <AnimatePresence mode="sync" initial={false}>
               {hasAnyHours && (
                 <motion.button
                   key="next-btn"
@@ -335,7 +335,8 @@ export const MainMobilePage = () => {
               <motion.div
                 key={`week-${weekIndex}`}
                 layout
-                transition={{ layout: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } }}
+                initial={false}
+                transition={{ layout: { duration: 0.25, ease: [0.22, 1, 0.36, 1] } }}
               >
                 <div className="week-mobile">
                   {week.map((button) => {
@@ -350,10 +351,11 @@ export const MainMobilePage = () => {
                         <motion.button
                           type="button"
                           className={`calendar-button-mobile ${status}`}
+                          initial={false}
                           animate={{
                             height: isWeekTitle ? '32px' : (activeKey !== null ? '40px' : '40px'),
                           }}
-                          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                         >
                           {button.title}
                         </motion.button>
@@ -385,16 +387,16 @@ export const MainMobilePage = () => {
               onClick={handlePrevMonth}
               aria-label="Предыдущий месяц"
             >
-              <SvgArrowLeft />
+              <SvgArrowMobileLeft />
             </button>
-            <span className="current-month">{monthsList[selectedMonthIndex].title}</span>
+            <span className="current-month">{MONTHS_FULL[selectedMonthIndex]}</span>
             <button
               type="button"
               className="month-arrow"
               onClick={handleNextMonth}
               aria-label="Следующий месяц"
             >
-              <SvgArrowRight />
+              <SvgArrowMobileRight />
             </button>
           </div>
         </div>

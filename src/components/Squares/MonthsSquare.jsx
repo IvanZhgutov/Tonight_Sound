@@ -14,4 +14,4 @@ export const MonthsSquare = ({ months }) => (
       ))}
     </div>
   </motion.div>
-)
+) 

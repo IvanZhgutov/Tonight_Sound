@@ -4,6 +4,12 @@ export const MONTHS_GENITIVE = [
   'сен', 'окт', 'ноя', 'дек'
 ]
 
+export const MONTHS_FULL = [
+  'Январь', 'Февраль', 'Март', 'Апрель',
+  'Май', 'Июнь', 'Июль', 'Август',
+  'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+]
+
 
 export const TIME_OPTIONS = [
   {title: '00:00', status: 'inactive'},

@@ -38,7 +38,7 @@ export const Square = ({
 
   // Вычисляем смещение для центрирования: (ширина контейнера / 2) - (ширина accent / 2)
   const accentWidth = 125 // ширина .accent-container в мобильной версии
-  const centerOffset = isMobile && width > 0 ? (width / 2 - accentWidth / 2) : (isMobile ? '130%' : '100%')
+  const centerOffset = isMobile && width > 0 ? (width / 2 - accentWidth / 2) : (isMobile ? '114%' : '100%')
 
   return (
     <motion.div
