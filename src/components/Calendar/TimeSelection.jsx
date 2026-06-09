@@ -19,9 +19,11 @@ export const TimeSelection = ({ timeOptions, onTimeClick, onClose, isMobile = fa
         <hr />
         <span className="gray-text">Выбери время!</span>
         <hr />
-        <button type="button" onClick={onClose}>
-          <u>скрыть</u>
-        </button>
+        {!isMobile && (
+          <button type="button" onClick={onClose}>
+            <u>скрыть</u>
+          </button>
+        )}
       </div>
 
 
